@@ -1,8 +1,8 @@
-from DocumentDbClient import DocumentDbClient
-from DocumentDbJsonImporter import DocumentDbJsonImporter
+from DocDbClient import DocDbClient
+from DocDbJsonImporter import DocDbJsonImporter
 import json
 
-class RecipeImporter(DocumentDbJsonImporter):
+class RecipeImporter(DocDbJsonImporter):
 
   def __init__(self, source_json_file_path, db_name, collection_name):
     try:
@@ -28,7 +28,7 @@ class RecipeImporter(DocumentDbJsonImporter):
       print("Successfully imported json file: " + self.source_json_file_path)
 
     except Exception as e:
-      print("ERROR: Failed to import json file: ",  e)
+      print("ERROR: Failed to import json file: ", e)
 
   # This method transforms the recipes json data into the format that can be
   # imported into DocumentDB.

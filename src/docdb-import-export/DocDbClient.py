@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class DocumentDbClient:
+class DocDbClient:
 
   # Class variable to hold the document db instance.
   connections = {}
@@ -46,23 +46,23 @@ class DocumentDbClient:
   # This method will use the pymongo to connect to the document db.
   def get_instance(self, connection_name, ssl_true = True):
     try:
-      if connection_name in DocumentDbClient.connections:
-        return DocumentDbClient.connections[connection_name]
+      if connection_name in DocDbClient.connections:
+        return DocDbClient.connections[connection_name]
       else:
         # Get document db connection string.
         docdb_connection_string = self.__get_docdb_connection_string(ssl_true)
         docdb = pymongo.MongoClient(docdb_connection_string)
-        DocumentDbClient.connections[connection_name] = docdb
-        return DocumentDbClient.connections[connection_name]
+        DocDbClient.connections[connection_name] = docdb
+        return DocDbClient.connections[connection_name]
     except Exception as e:
       print("ERROR: Failed to connect to MongoDB cluster: " + str(e))
       sys.exit(1)
 
   def disconnect(self, connection_name):
     try:
-      if connection_name in DocumentDbClient.connections:
-        DocumentDbClient.connections[connection_name].close()
-        del DocumentDbClient.connections[connection_name]
+      if connection_name in DocDbClient.connections:
+        DocDbClient.connections[connection_name].close()
+        del DocDbClient.connections[connection_name]
     except Exception as e:
       print("ERROR: Failed to disconnect from MongoDB cluster: " + str(e))
       sys.exit(1)
