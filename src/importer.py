@@ -16,9 +16,9 @@ Options:
 
 """
 
-import DocDbJsonImporter
 from docopt import docopt
-import utils
+from docdb_import_export import utils
+from docdb_import_export import DocDbJsonImporter
 
 def importFromJson(arguments):
   prompt = f'This will import the provided json file to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '

@@ -1,10 +1,10 @@
 import os
 from abc import ABC, abstractmethod
-from DocDbClient import DocDbClient
+from .DocDbClient import DocDbClient
 
 # Abstract class for importing json data into DocumentDB database. This class
 # should be extended by all the classes that import json data into DocumentDB.
-class DocumentDbJsonImporterAbstract(ABC):
+class DocDbJsonImporterAbstract(ABC):
 
   def __init__(self, source_json_file_path, db_name, collection_name):
     # Check if the source json file path is valid file.

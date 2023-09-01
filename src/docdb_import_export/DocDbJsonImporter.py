@@ -1,6 +1,8 @@
-import DocDbJsonImporterAbstract
 import json
 import os
+from abc import ABC, abstractmethod
+
+from .DocDbJsonImporterAbstract import DocDbJsonImporterAbstract
 
 class DocDbJsonImporter(DocDbJsonImporterAbstract):
 
