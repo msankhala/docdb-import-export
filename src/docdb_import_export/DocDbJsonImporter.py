@@ -1,4 +1,4 @@
-from DocDbJsonImporterAbstract import DocDbJsonImporterAbstract
+import DocDbJsonImporterAbstract
 import json
 import os
 

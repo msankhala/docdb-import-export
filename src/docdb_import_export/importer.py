@@ -16,7 +16,7 @@ Options:
 
 """
 
-from DocDbJsonImporter import DocDbJsonImporter
+import DocDbJsonImporter
 from docopt import docopt
 import utils
 
