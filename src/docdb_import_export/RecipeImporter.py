@@ -1,5 +1,5 @@
-from DocDbClient import DocDbClient
-from DocDbJsonImporter import DocDbJsonImporter
+from .docdb_client import DocDbClient
+from .docdb_json_importer import DocDbJsonImporter
 import json
 
 class RecipeImporter(DocDbJsonImporter):
