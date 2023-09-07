@@ -50,15 +50,21 @@ def importJsonFileWithImporter(arguments):
     ImporterClass = utils.get_class_from_path(arguments["--import-class"])
   if utils.confirm(prompt):
     print("Importing json file: " + arguments["--fromjson"])
-    recipe_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"])
-    recipe_importer.import_json()
+    json_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"])
+    json_importer.import_json()
 
-def importFromJsonDir(arguments):
-  prompt = f'This will import all the json files in the directory to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
+def importJsonDirWithImporter(arguments):
+  # If --import-class is not specified, import with default import class.
+  if not arguments["--import-class"]:
+    prompt = f'This will import all the json files in the directory "{arguments["fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
+    ImporterClass = DocDbDefaultJsonImporter
+  else:
+    prompt = f'This will import all the json files in the directory "{arguments["fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection using the custom import class "{arguments["--import-class"]}". Are you sure you want to continue? [y/N]: '
+    ImporterClass = utils.get_class_from_path(arguments["--import-class"])
   if utils.confirm(prompt):
     print("Importing json files in the directory: " + arguments["--fromjsondir"])
-    recipe_importer = DocDbDefaultJsonImporter(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"])
-    recipe_importer.import_dir_json()
+    json_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"])
+    json_importer.import_dir_json()
 
 def validateArguments(arguments):
   if arguments["--fromjson"] and not os.path.isfile(arguments["--fromjson"]):
@@ -78,7 +84,7 @@ try:
   if arguments["import"] and arguments["--fromjson"]:
     importJsonFileWithImporter(arguments)
   elif arguments["import"] and arguments["--fromjsondir"]:
-    importFromJsonDir(arguments)
+    importJsonDirWithImporter(arguments)
 
 except Exception as e:
   print("ERROR: Failed to run __main__.py file: ", e)

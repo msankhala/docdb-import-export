@@ -60,10 +60,10 @@ class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
 
       items = []
       for index in json_list:
-        # Transform the recipes json data into the format that can be imported
+        # Transform the json data into the format that can be imported
         # into DocumentDB.
         items.append(self.transform_item(json_list[index]))
-      # Insert the recipe into DocumentDB.
+      # Insert the data into DocumentDB.
       self.docdb[self.db][self.collection].insert_many(items)
       print("Successfully imported json file: " + self.source_json_file_path)
 
@@ -72,19 +72,21 @@ class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
 
   def import_dir_json(self):
     try:
-      self.drop_collection()
+      self.delete_collection()
       # Read the json files from the directory assuming each file is a array of
       # json objects.
       for file in os.listdir(self.source_json_file_path):
         if file.endswith(".json"):
           with open(os.path.join(self.source_json_file_path, file)) as f:
-            items = json.load(f)
-            for item in items:
-              # Transform the json data into the format that can be imported
-              # into DocumentDB.
-              item = self.transform_item(item)
-              # Insert the json data into DocumentDB.
-              self.docdb[self.db][self.collection].insert_one(item)
+            json_list = json.load(f)
+
+          items = []
+          for index in json_list:
+            # Transform the json data into the format that can be imported
+            # into DocumentDB.
+            items.append(self.transform_item(json_list[index]))
+          # Insert the json data into DocumentDB.
+          self.docdb[self.db][self.collection].insert_many(items)
           print("Successfully imported json file: " + file)
       print("Successfully imported json files in the directory: " + self.source_json_file_path)
 
