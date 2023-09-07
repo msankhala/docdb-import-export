@@ -1,10 +1,10 @@
-"""JSON DocumentDb Importer.
+"""JSON DocumentDb Import Export.
 
 Usage:
-  importer.py import --fromjson=<path-to-file.json> --db=<db> --collection=<collection>
-  importer.py import --fromjsondir=<path-to-dir> --db=<db> --collection=<collection>
-  importer.py (-h | --help)
-  importer.py --version
+  docdb-import-export.py import --fromjson=<path-to-file.json> --db=<db> --collection=<collection>
+  docdb-import-export.py import --fromjsondir=<path-to-dir> --db=<db> --collection=<collection>
+  docdb-import-export.py (-h | --help)
+  docdb-import-export.py --version
 
 Options:
   -h --help     Show this screen.
