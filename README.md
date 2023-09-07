@@ -16,13 +16,20 @@ https://github.com/msankhala/docdb-import-export
 1. Import data from a json file to document db
 
     ```sh
-    python -m docdb_import_export import --fromjson=../my-data-folder/my.json --db=test --collection=temp --drop
+    python -m docdb_import_export import \
+    --fromjson=../my-data-folder/my.json \
+    --db=test --collection=temp \
+    --drop
     ```
 
 1. Import data from a json file to document db using custom importer class
 
     ```sh
-    python -m docdb_import_export import --fromjson=../my-data-folder/my.json --db=test --collection=temp --import-class=some-dir/MyCustomImporter.py --drop
+    python -m docdb_import_export import \
+    --fromjson=../my-data-folder/my.json \
+    --db=test --collection=temp \
+    --import-class=some-dir/MyCustomImporter.py \
+    --drop
     ```
 
     The importer class filename and classname should be same and importer class should be a subclass of `DocDbDefaultJsonImporter` class and should implement all abstract methods.
@@ -30,13 +37,21 @@ https://github.com/msankhala/docdb-import-export
 1. Import data from a directory to document db
 
     ```sh
-    python -m docdb_import_export import --fromjsondir=../my-data-folder/ --db=test --collection=temp --drop
+    python -m docdb_import_export import \
+    --fromjsondir=../my-data-folder/ \
+    --db=test \
+    --collection=temp \
+    --drop
     ```
 
 1. Import data from a directory to document db using custom importer class
 
     ```sh
-    python -m docdb_import_export import --fromjsondir=../my-data-folder/ --db=test --collection=temp --import-class=some-dir/MyCustomImporter.py --drop
+    python -m docdb_import_export import \
+    --fromjsondir=../my-data-folder/ \
+    --db=test --collection=temp \
+    --import-class=some-dir/MyCustomImporter.py \
+    --drop
     ```
 
     The importer class filename and classname should be same and importer class should be a subclass of `DocDbDefaultJsonImporter` class and should implement all abstract methods.
