@@ -15,6 +15,14 @@ https://github.com/msankhala/docdb-import-export
 
 1. Create a EC2 instance in the same VPC as your document db
     1. [Connecting to an Amazon DocumentDB Cluster from Outside an Amazon VPC](https://docs.aws.amazon.com/documentdb/latest/developerguide/connect-from-outside-a-vpc.html)
+1. Run SSH tunnel to the EC2 instance
+
+    ```sh
+    ssh -i <path/to/ec2-private-key.pem> -L 27017:<DOCUMENT-DB-SERVER-HOSTNAME>:27017 ec2-user@EC2-INSTANCE-DNS-ENDPOINT -N
+    ```
+
+    keep this command running in a separate terminal window.
+
 1. Create `.env` file in the directory from where you will be running the import/export command.
 
     ```env
