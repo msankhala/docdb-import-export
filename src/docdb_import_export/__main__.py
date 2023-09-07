@@ -1,14 +1,15 @@
 """JSON DocumentDb Import Export.
 
 Usage:
-  docdb-import-export import --fromjson=<path-to-file.json> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
-  docdb-import-export import --fromjsondir=<path-to-dir> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
+  docdb-import-export import --env-file=/path/to/.env --fromjson=<path-to-file.json> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
+  docdb-import-export import --env-file=/path/to/.env --fromjsondir=<path-to-dir> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
   docdb-import-export (-h | --help)
   docdb-import-export --version
 
 Options:
   -h --help                               Show this screen.
   --version                               Show version.
+  --env-file=<path/to/.env>               Path to the .env file.
   --db=<db>                               Name of the database to import the json data.
   --collection=<collection>               Name of the collection to import the json data.
   --drop                                  Drop the collection before importing the json data.
@@ -72,10 +73,17 @@ def validateArguments(arguments):
     print("ERROR: The provided import class does not exist: " + arguments["--import-class"])
     sys.exit(1)
 
+def importEnvFile(arguments):
+  if arguments["--env-file"] and os.path.isfile(arguments["--env-file"]):
+    print("Importing environment variables from file: " + arguments["--env-file"])
+    # Load environment variables from .env file.
+    load_dotenv(dotenv_path=arguments["--env-file"])
+
 try:
   # Import recipes json data into DocumentDB.
   arguments = docopt(__doc__, version='JSON DocumentDb Importer 2.0')
   validateArguments(arguments)
+  importEnvFile(arguments)
   if arguments["import"] and arguments["--fromjson"]:
     importJsonFileWithImporter(arguments)
   elif arguments["import"] and arguments["--fromjsondir"]:

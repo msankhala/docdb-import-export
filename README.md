@@ -80,7 +80,7 @@ Provide the relevant values to the above environment variables. These variables 
 
 ## Providing your own custom importer class
 
-1. Create a custom importer class that extends `DocDbDefaultJsonImporter` class and implement all abstract methods.
+Create a custom importer class that extends `DocDbDefaultJsonImporter` class and implement all abstract methods.
 
 **src/some-path/MyCustomImporter.py**
 
