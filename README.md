@@ -58,6 +58,26 @@ https://github.com/msankhala/docdb-import-export
 
 ## Providing your own custom importer class
 
+1. Create a `.env` file in the same path as your custom importer class.
+
+```env
+DOCDB_HOST="YOUR_DOCUMENT_DB_HOSTNAME"
+DOCDB_PORT="YOUR_DOCUMENT_DB_PORT"
+DOCDB_USERNAME="YOUR_DOCUMENT_DB_USERNAME"
+DOCDB_PASSWORD="YOUR_DOCUMENT_DB_PASSWORD"
+DOCDB_CA_FILE_PATH="path/to/YOUR_SSL_CAFIL_PATH"
+DOCDB_REPLICA_SET="rs0"
+DOCDB_READ_PREFERENCE="secondaryPreferred"
+DOCDB_RETRY_WRITES="true"
+DOCDB_DBNAME="dbname"
+DOCDB_TLS_ALLOW_INVALID_HOSTNAMES="true"
+DOCDB_DIRECT_CONNECTION="true"
+```
+
+Provide the relevant values to the above environment variables. These variables will automatically be loaded by the package.
+
+1. Create a custom importer class that extends `DocDbDefaultJsonImporter` class and implement all abstract methods.
+
 **src/some-path/MyCustomImporter.py**
 
 ```python
@@ -74,7 +94,7 @@ class MyCustomImporter(DocDbDefaultJsonImporter):
     try:
       super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
     except Exception as e:
-      print("ERROR: Failed to initialize RecipeImporter: " + str(e))
+      print("ERROR: Failed to initialize MyCustomImporter: " + str(e))
       exit(1)
 
   def import_json(self):
@@ -88,10 +108,9 @@ class MyCustomImporter(DocDbDefaultJsonImporter):
 
       items = []
       for index in json_list:
-        # Transform the json data into the format that can be imported
-        # into DocumentDB.
+        # Call the transform_item method to transform the json data.
         items.append(self.transform_item(json_list[index]))
-      # Insert the recipe into DocumentDB.
+      # Insert the items into DocumentDB.
       self.docdb[self.db][self.collection].insert_many(items)
       print("Successfully imported json file: " + self.source_json_file_path)
 
@@ -100,9 +119,9 @@ class MyCustomImporter(DocDbDefaultJsonImporter):
 
   # This method allows you to transform the json data so that you can add or
   # remove the fields from the json data.
-  def transform_item(self, recipe):
-    recipe["_id"] = recipe["id"]
-    del recipe["id"]
+  def transform_item(self, item):
+    item["_id"] = item["id"]
+    del item["id"]
     # Add more transformations here if you want to.
-    return recipe
+    return item
 ```
