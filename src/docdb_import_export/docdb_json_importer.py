@@ -7,16 +7,13 @@ from docdb_import_export.docdb_client import DocDbClient
 # should be extended by all the classes that import json data into DocumentDB.
 class DocDbJsonImporterAbstract(ABC):
 
-  def __init__(self, source_json_file_path, db_name, collection_name):
-    # Check if the source json file path is valid file.
-    if not source_json_file_path or not os.path.isfile(source_json_file_path):
-      raise Exception("Invalid source json file path: " + source_json_file_path)
-
+  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection = False):
     # Initialize instance variables.
     self.docdb = DocDbClient().get_instance("docdb", True)
     self.source_json_file_path = source_json_file_path
     self.db =  db_name
     self.collection = collection_name
+    self.drop_collection = drop_collection
 
   # This method should be implemented by the classes that extend this class.
   @abstractmethod
@@ -31,6 +28,10 @@ class DocDbJsonImporterAbstract(ABC):
   def transform_item(self, item):
     pass
 
+  @abstractmethod
+  def delete_collection(self):
+    pass
+
   # Set the given collection name as the current collection.
   def set_collection(self, collection_name):
     self.collection = collection_name
@@ -40,36 +41,38 @@ class DocDbJsonImporterAbstract(ABC):
     self.db = db_name
 
 # Class for importing json data into DocumentDB database.
-class DocDbJsonImporter(DocDbJsonImporterAbstract):
+class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
 
-  def __init__(self, source_json_file_path, db_name, collection_name):
+  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection):
     try:
-      super().__init__(source_json_file_path, db_name, collection_name)
+      super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
     except Exception as e:
       print("ERROR: Failed to initialize RecipeImporter: " + str(e))
       exit(1)
 
   def import_json(self):
-    # self.docdb[self.db][self.collection].drop()
     try:
+      self.delete_collection()
+
       # Read the json data from the file assuming it is a array of json objects.
       with open(self.source_json_file_path) as f:
-        items = json.load(f)
+        json_list = json.load(f)
 
-      for item in items:
+      items = []
+      for index in json_list:
         # Transform the recipes json data into the format that can be imported
         # into DocumentDB.
-        item = self.transform_item(item)
-        # Insert the recipe into DocumentDB.
-        self.docdb[self.db][self.collection].insert_one(item)
+        items.append(self.transform_item(json_list[index]))
+      # Insert the recipe into DocumentDB.
+      self.docdb[self.db][self.collection].insert_many(items)
       print("Successfully imported json file: " + self.source_json_file_path)
 
     except Exception as e:
       print("ERROR: Failed to import json file: ", e)
 
   def import_dir_json(self):
-    # self.docdb[self.db][self.collection].drop()
     try:
+      self.drop_collection()
       # Read the json files from the directory assuming each file is a array of
       # json objects.
       for file in os.listdir(self.source_json_file_path):
@@ -92,8 +95,12 @@ class DocDbJsonImporter(DocDbJsonImporterAbstract):
   # DocumentDB.
   def transform_item(self, item):
       return item
-        # recipe["_id"] = recipe["id"]
-        # del recipe["id"]
-        # yield recipe
 
-
+  # Drop the collection.
+  def delete_collection(self):
+    try:
+      # If self.drop_collection is set to True, drop the collection.
+      if self.drop_collection:
+        self.docdb[self.db][self.collection].drop()
+    except Exception as e:
+      print("ERROR: Failed to drop collection: ", e)
