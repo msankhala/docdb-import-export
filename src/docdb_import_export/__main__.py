@@ -17,19 +17,19 @@ Options:
 """
 
 from docopt import docopt
-import utils
+from utils import confirm
 from docdb_json_importer import DocDbJsonImporter
 
 def importFromJson(arguments):
   prompt = f'This will import the provided json file to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
-  if utils.confirm(prompt):
+  if confirm(prompt):
     print("Importing json file: " + arguments["--fromjson"])
     recipe_importer = DocDbJsonImporter(arguments["--fromjson"], arguments["--db"], arguments["--collection"])
     recipe_importer.import_json()
 
 def importFromJsonDir(arguments):
   prompt = f'This will import all the json files in the directory to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
-  if utils.confirm(prompt):
+  if confirm(prompt):
     print("Importing json files in the directory: " + arguments["--fromjsondir"])
     recipe_importer = DocDbJsonImporter(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"])
     recipe_importer.import_dir_json()
