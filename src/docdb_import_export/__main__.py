@@ -29,6 +29,10 @@ sys.path.append(parentdir)
 from docdb_import_export import utils
 from docdb_import_export.docdb_json_importer  import DocDbDefaultJsonImporter
 
+# Load environment variables from .env file.
+from dotenv import load_dotenv
+load_dotenv()
+
 # def confirmImport(arguments):
 def importJsonFileWithImporter(arguments):
   # If --import-class is not specified, import with default import class.

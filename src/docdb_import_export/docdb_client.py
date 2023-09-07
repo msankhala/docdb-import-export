@@ -1,9 +1,6 @@
 import os
 import sys
 import pymongo
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class DocDbClient:
 

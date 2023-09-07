@@ -11,6 +11,28 @@ https://github.com/msankhala/docdb-import-export
 1. - [ ] Provider exporter script to export data from document db collections to json files.
 1. - [ ] Provider exporter script to export all data from document db collections to json files in a given directory.
 
+## Setup
+
+1. Create a EC2 instance in the same VPC as your document db
+    1. [Connecting to an Amazon DocumentDB Cluster from Outside an Amazon VPC](https://docs.aws.amazon.com/documentdb/latest/developerguide/connect-from-outside-a-vpc.html)
+1. Create `.env` file in the directory from where you will be running the import/export command.
+
+    ```env
+    DOCDB_HOST="YOUR_DOCUMENT_DB_HOSTNAME"
+    DOCDB_PORT="YOUR_DOCUMENT_DB_PORT"
+    DOCDB_USERNAME="YOUR_DOCUMENT_DB_USERNAME"
+    DOCDB_PASSWORD="YOUR_DOCUMENT_DB_PASSWORD"
+    DOCDB_CA_FILE_PATH="path/to/YOUR_SSL_CAFIL_PATH"
+    DOCDB_REPLICA_SET="rs0"
+    DOCDB_READ_PREFERENCE="secondaryPreferred"
+    DOCDB_RETRY_WRITES="true"
+    DOCDB_DBNAME="dbname"
+    DOCDB_TLS_ALLOW_INVALID_HOSTNAMES="true"
+    DOCDB_DIRECT_CONNECTION="true"
+    ```
+
+Provide the relevant values to the above environment variables. These variables will automatically be loaded by the package.
+
 ## Uses
 
 1. Import data from a json file to document db
@@ -57,24 +79,6 @@ https://github.com/msankhala/docdb-import-export
     The importer class filename and classname should be same and importer class should be a subclass of `DocDbDefaultJsonImporter` class and should implement all abstract methods.
 
 ## Providing your own custom importer class
-
-1. Create a `.env` file in the same path as your custom importer class.
-
-```env
-DOCDB_HOST="YOUR_DOCUMENT_DB_HOSTNAME"
-DOCDB_PORT="YOUR_DOCUMENT_DB_PORT"
-DOCDB_USERNAME="YOUR_DOCUMENT_DB_USERNAME"
-DOCDB_PASSWORD="YOUR_DOCUMENT_DB_PASSWORD"
-DOCDB_CA_FILE_PATH="path/to/YOUR_SSL_CAFIL_PATH"
-DOCDB_REPLICA_SET="rs0"
-DOCDB_READ_PREFERENCE="secondaryPreferred"
-DOCDB_RETRY_WRITES="true"
-DOCDB_DBNAME="dbname"
-DOCDB_TLS_ALLOW_INVALID_HOSTNAMES="true"
-DOCDB_DIRECT_CONNECTION="true"
-```
-
-Provide the relevant values to the above environment variables. These variables will automatically be loaded by the package.
 
 1. Create a custom importer class that extends `DocDbDefaultJsonImporter` class and implement all abstract methods.
 
