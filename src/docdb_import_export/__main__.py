@@ -24,7 +24,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from docdb_import_export import utils
-from docdb_json_importer import DocDbJsonImporter
+from docdb_import_export.docdb_json_importer  import DocDbJsonImporter
 
 def importFromJson(arguments):
   prompt = f'This will import the provided json file to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
