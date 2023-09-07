@@ -23,7 +23,7 @@ from docopt import docopt
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
-import utils as utils
+from docdb_import_export import utils
 from docdb_json_importer import DocDbJsonImporter
 
 def importFromJson(arguments):
