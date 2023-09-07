@@ -103,31 +103,23 @@ load_dotenv()
 class MyCustomImporter(DocDbDefaultJsonImporter):
 
   def __init__(self, source_json_file_path, db_name, collection_name, drop_collection):
-    try:
-      super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
-    except Exception as e:
-      print("ERROR: Failed to initialize MyCustomImporter: " + str(e))
-      exit(1)
+    super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
 
   def import_json(self):
-    try:
-      # Only add if you want to add support for --drop option.
-      self.delete_collection()
+    # Only add if you want to add support for --drop option.
+    self.delete_collection()
 
-      # Read the json data from the file.
-      with open(self.source_json_file_path) as f:
-        json_list = json.load(f)
+    # Read the json data from the file.
+    with open(self.source_json_file_path) as f:
+      json_list = json.load(f)
 
-      items = []
-      for index in json_list:
-        # Call the transform_item method to transform the json data.
-        items.append(self.transform_item(json_list[index]))
-      # Insert the items into DocumentDB.
-      self.docdb[self.db][self.collection].insert_many(items)
-      print("Successfully imported json file: " + self.source_json_file_path)
-
-    except Exception as e:
-      print("ERROR: Failed to import json file: ", e)
+    items = []
+    for index in json_list:
+      # Call the transform_item method to transform the json data.
+      items.append(self.transform_item(json_list[index]))
+    # Insert the items into DocumentDB.
+    self.docdb[self.db][self.collection].insert_many(items)
+    print("Successfully imported json file: " + self.source_json_file_path)
 
   # This method allows you to transform the json data so that you can add or
   # remove the fields from the json data.
