@@ -52,14 +52,14 @@ def importJsonFileWithImporter(arguments):
 def importJsonDirWithImporter(arguments):
   # If --import-class is not specified, import with default import class.
   if not arguments["--import-class"]:
-    prompt = f'This will import all the json files in the directory "{arguments["fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
+    prompt = f'This will import all the json files in the directory "{arguments["--fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
     ImporterClass = DocDbDefaultJsonImporter
   else:
-    prompt = f'This will import all the json files in the directory "{arguments["fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection using the custom import class "{arguments["--import-class"]}". Are you sure you want to continue? [y/N]: '
+    prompt = f'This will import all the json files in the directory "{arguments["--fromjsondir"]}" to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection using the custom import class "{arguments["--import-class"]}". Are you sure you want to continue? [y/N]: '
     ImporterClass = utils.get_class_from_path(arguments["--import-class"])
   if utils.confirm(prompt):
     print("Importing json files in the directory: " + arguments["--fromjsondir"])
-    json_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"])
+    json_importer = ImporterClass(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"], arguments["--drop"])
     json_importer.import_dir_json()
 
 def validateArguments(arguments):
@@ -79,15 +79,15 @@ def importEnvFile(arguments):
     # Load environment variables from .env file.
     load_dotenv(dotenv_path=arguments["--env-file"])
 
-try:
-  # Import recipes json data into DocumentDB.
-  arguments = docopt(__doc__, version='JSON DocumentDb Importer 2.0')
-  validateArguments(arguments)
-  importEnvFile(arguments)
-  if arguments["import"] and arguments["--fromjson"]:
-    importJsonFileWithImporter(arguments)
-  elif arguments["import"] and arguments["--fromjsondir"]:
-    importJsonDirWithImporter(arguments)
+# try:
+# Import recipes json data into DocumentDB.
+arguments = docopt(__doc__, version='JSON DocumentDb Importer 2.0')
+validateArguments(arguments)
+importEnvFile(arguments)
+if arguments["import"] and arguments["--fromjson"]:
+  importJsonFileWithImporter(arguments)
+elif arguments["import"] and arguments["--fromjsondir"]:
+  importJsonDirWithImporter(arguments)
 
-except Exception as e:
-  print("ERROR: Failed to run __main__.py file: ", e)
+# except Exception as e:
+#   print("ERROR: Failed to run __main__.py file: ", e)

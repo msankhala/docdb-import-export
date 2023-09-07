@@ -44,54 +44,43 @@ class DocDbJsonImporterAbstract(ABC):
 class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
 
   def __init__(self, source_json_file_path, db_name, collection_name, drop_collection):
-    try:
-      super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
-    except Exception as e:
-      print("ERROR: Failed to initialize RecipeImporter: " + str(e))
-      exit(1)
+    super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
 
   def import_json(self):
-    try:
-      self.delete_collection()
+    self.delete_collection()
 
-      # Read the json data from the file assuming it is a array of json objects.
-      with open(self.source_json_file_path) as f:
-        json_list = json.load(f)
+    # Read the json data from the file assuming it is a array of json objects.
+    with open(self.source_json_file_path) as f:
+      json_list = json.load(f)
 
-      items = []
-      for index in json_list:
-        # Transform the json data into the format that can be imported
-        # into DocumentDB.
-        items.append(self.transform_item(json_list[index]))
-      # Insert the data into DocumentDB.
-      self.docdb[self.db][self.collection].insert_many(items)
-      print("Successfully imported json file: " + self.source_json_file_path)
+    items = []
+    for index in json_list:
+      # Transform the json data into the format that can be imported
+      # into DocumentDB.
+      items.append(self.transform_item(json_list[index]))
+    # Insert the data into DocumentDB.
+    self.docdb[self.db][self.collection].insert_many(items)
+    print("Successfully imported json file: " + self.source_json_file_path)
 
-    except Exception as e:
-      print("ERROR: Failed to import json file: ", e)
 
   def import_dir_json(self):
-    try:
-      self.delete_collection()
-      # Read the json files from the directory assuming each file is a array of
-      # json objects.
-      for file in os.listdir(self.source_json_file_path):
-        if file.endswith(".json"):
-          with open(os.path.join(self.source_json_file_path, file)) as f:
-            json_list = json.load(f)
+    self.delete_collection()
+    # Read the json files from the directory assuming each file is a array of
+    # json objects.
+    for file in os.listdir(self.source_json_file_path):
+      if file.endswith(".json"):
+        with open(os.path.join(self.source_json_file_path, file)) as f:
+          json_list = json.load(f)
 
-          items = []
-          for index in json_list:
-            # Transform the json data into the format that can be imported
-            # into DocumentDB.
-            items.append(self.transform_item(json_list[index]))
-          # Insert the json data into DocumentDB.
-          self.docdb[self.db][self.collection].insert_many(items)
-          print("Successfully imported json file: " + file)
-      print("Successfully imported json files in the directory: " + self.source_json_file_path)
-
-    except Exception as e:
-      print("ERROR: Failed to import json file: ", e)
+        items = []
+        for index in json_list:
+          # Transform the json data into the format that can be imported
+          # into DocumentDB.
+          items.append(self.transform_item(json_list[index]))
+        # Insert the json data into DocumentDB.
+        self.docdb[self.db][self.collection].insert_many(items)
+        print("Successfully imported json file: " + file)
+    print("Successfully imported json files in the directory: " + self.source_json_file_path)
 
   # This method transforms the item into the format that can be imported into
   # DocumentDB.
