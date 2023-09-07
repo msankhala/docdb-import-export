@@ -7,24 +7,15 @@ Usage:
   docdb-import-export --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
-  --db=<db>     Name of the database to import the json data.
-  --collection=<collection>     Name of the collection to import the json data.
-  --drop     Drop the collection before importing the json data.
-  --fromjson=<path-to-file.json>  Path to the json file to import. It expects
-  the file to be an array of json objects.
-  --fromjsondir=<path-to-dir>  Path to dir of json files to import. It will only
-  import files with .json extension and only one level deep. If this option is
-  specified, --fromjson option will be ignored. It expects each file to be an
-  array of json objects.
-  --import-class=<path/to/MyImportClass.py>  Absolute path to the custom import
-  class that will be used to import the json data. If import class is not
-  specified, the default import class will be used. That will import the json
-  data as is. The custom import class must be a subclass of
-  `DocDbDefaultJsonImporter` and must implement the `import_json` method. The
-  class name should be the same as the file name. For example, if the file name
-  is `MyImportClass.py`, the class name should be `MyImportClass`.
+  -h --help                               Show this screen.
+  --version                               Show version.
+  --db=<db>                               Name of the database to import the json data.
+  --collection=<collection>               Name of the collection to import the json data.
+  --drop                                  Drop the collection before importing the json data.
+  --fromjson=<path/file.json>             Path to the json file to import. It expects the file to be an array of json objects.
+  --fromjsondir=<path/dir>                Path to dir of json files to import. It will only import files with .json extension and only one level deep. If this option is specified, `--fromjson` option will be ignored. It expects each file to be an array of json objects.
+
+  --import-class=<path/MyImportClass.py>  Absolute path to the custom import class that will be used to import the json data. If import class is not specified, the default importer class will be used. That will import the json data as is. The custom import class must be a subclass of `DocDbDefaultJsonImporter` and must implement all abstract methods. The class name should be the same as the file name. For example, if the file name is `MyImportClass.py`, the class name should be `MyImportClass`.
 
 """
 
