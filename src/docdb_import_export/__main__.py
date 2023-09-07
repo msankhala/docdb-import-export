@@ -1,10 +1,10 @@
 """JSON DocumentDb Import Export.
 
 Usage:
-  docdb-import-export.py import --fromjson=<path-to-file.json> --db=<db> --collection=<collection>
-  docdb-import-export.py import --fromjsondir=<path-to-dir> --db=<db> --collection=<collection>
-  docdb-import-export.py (-h | --help)
-  docdb-import-export.py --version
+  docdb-import-export import --fromjson=<path-to-file.json> --db=<db> --collection=<collection>
+  docdb-import-export import --fromjsondir=<path-to-dir> --db=<db> --collection=<collection>
+  docdb-import-export (-h | --help)
+  docdb-import-export --version
 
 Options:
   -h --help     Show this screen.
@@ -17,8 +17,8 @@ Options:
 """
 
 from docopt import docopt
-from docdb_import_export import utils
-from docdb_import_export.docdb_json_importer import DocDbJsonImporter
+import utils
+from docdb_json_importer import DocDbJsonImporter
 
 def importFromJson(arguments):
   prompt = f'This will import the provided json file to the "{arguments["--db"]}" database and "{arguments["--collection"]}" collection. Are you sure you want to continue? [y/N]: '
@@ -34,10 +34,12 @@ def importFromJsonDir(arguments):
     recipe_importer = DocDbJsonImporter(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"])
     recipe_importer.import_dir_json()
 
-if __name__ == "__main__":
+try:
   # Import recipes json data into DocumentDB.
   arguments = docopt(__doc__, version='JSON DocumentDb Importer 2.0')
   if arguments["import"] and arguments["--fromjson"]:
     importFromJson(arguments)
   elif arguments["import"] and arguments["--fromjsondir"]:
     importFromJsonDir(arguments)
+except Exception as e:
+  print("ERROR: Failed to run __main__.py file: ", e)

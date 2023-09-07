@@ -1,7 +1,7 @@
 import json
 import os
 from abc import ABC, abstractmethod
-from .docdb_client import DocDbClient
+from docdb_client import DocDbClient
 
 # Abstract class for importing json data into DocumentDB database. This class
 # should be extended by all the classes that import json data into DocumentDB.
