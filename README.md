@@ -134,3 +134,12 @@ class MyCustomImporter(DocDbDefaultJsonImporter):
     # Add more transformations here if you want to.
     return item
 ```
+
+**Example usage:**
+
+```bash
+python -m docdb_import_export import --env-file=src/docdb_import_export/.env --fromjson=../recipe-finder-data/ccf.json --db=test --collection=recipe --import-class=docdb-migration/RecipeImporter.py --drop
+This will import the provided json file to the "test" database and "recipe" collection using the custom import class "docdb-migration/RecipeImporter.py". Are you sure you want to continue? [y/N]: y
+Importing json file: ../recipe-finder-data/ccf.json
+Successfully imported json file: ../recipe-finder-data/ccf.json
+```
