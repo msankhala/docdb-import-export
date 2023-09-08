@@ -7,13 +7,14 @@ from docdb_import_export.docdb_client import DocDbClient
 # should be extended by all the classes that import json data into DocumentDB.
 class DocDbJsonImporterAbstract(ABC):
 
-  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection = False):
+  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection = False, update = False):
     # Initialize instance variables.
     self.docdb = DocDbClient().get_instance("docdb", True)
     self.source_json_file_path = source_json_file_path
     self.db =  db_name
     self.collection = collection_name
     self.drop_collection = drop_collection
+    self.update = update
 
   # This method should be implemented by the classes that extend this class.
   @abstractmethod
@@ -43,8 +44,8 @@ class DocDbJsonImporterAbstract(ABC):
 # Class for importing json data into DocumentDB database.
 class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
 
-  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection):
-    super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
+  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection, update):
+    super().__init__(source_json_file_path, db_name, collection_name, drop_collection, update)
 
   def import_json(self):
     self.delete_collection()
@@ -91,7 +92,7 @@ class DocDbDefaultJsonImporter(DocDbJsonImporterAbstract):
   def delete_collection(self):
     try:
       # If self.drop_collection is set to True, drop the collection.
-      if self.drop_collection:
+      if self.drop_collection and self.update == False:
         self.docdb[self.db][self.collection].drop()
     except Exception as e:
       print("ERROR: Failed to drop collection: ", e)

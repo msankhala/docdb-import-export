@@ -1,8 +1,8 @@
 """JSON DocumentDb Import Export.
 
 Usage:
-  docdb-import-export import --env-file=/path/to/.env --fromjson=<path-to-file.json> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
-  docdb-import-export import --env-file=/path/to/.env --fromjsondir=<path-to-dir> --db=<db> --collection=<collection> [--drop] [--import-class=<path/to/MyImportClass.py>]
+  docdb-import-export import --env-file=/path/to/.env --fromjson=<path-to-file.json> --db=<db> --collection=<collection> [--drop] [--update] [--import-class=<path/to/MyImportClass.py>]
+  docdb-import-export import --env-file=/path/to/.env --fromjsondir=<path-to-dir> --db=<db> --collection=<collection> [--drop] [--update] [--import-class=<path/to/MyImportClass.py>]
   docdb-import-export (-h | --help)
   docdb-import-export --version
 
@@ -13,6 +13,7 @@ Options:
   --db=<db>                               Name of the database to import the json data.
   --collection=<collection>               Name of the collection to import the json data.
   --drop                                  Drop the collection before importing the json data.
+  --update                                Update the document into the collection. If `--update` is specified, `--drop` will be ignored.
   --fromjson=<path/file.json>             Path to the json file to import. It expects the file to be an array of json objects.
   --fromjsondir=<path/dir>                Path to dir of json files to import. It will only import files with .json extension and only one level deep. If this option is specified, `--fromjson` option will be ignored. It expects each file to be an array of json objects.
 
@@ -46,7 +47,7 @@ def importJsonFileWithImporter(arguments):
     ImporterClass = utils.get_class_from_path(arguments["--import-class"])
   if utils.confirm(prompt):
     print("Importing json file: " + arguments["--fromjson"])
-    json_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"])
+    json_importer = ImporterClass(arguments["--fromjson"], arguments["--db"], arguments["--collection"], arguments["--drop"], arguments["--update"])
     json_importer.import_json()
 
 def importJsonDirWithImporter(arguments):
@@ -59,7 +60,7 @@ def importJsonDirWithImporter(arguments):
     ImporterClass = utils.get_class_from_path(arguments["--import-class"])
   if utils.confirm(prompt):
     print("Importing json files in the directory: " + arguments["--fromjsondir"])
-    json_importer = ImporterClass(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"], arguments["--drop"])
+    json_importer = ImporterClass(arguments["--fromjsondir"], arguments["--db"], arguments["--collection"], arguments["--drop"], arguments["--update"])
     json_importer.import_dir_json()
 
 def validateArguments(arguments):
