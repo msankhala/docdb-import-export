@@ -33,7 +33,7 @@ https://github.com/msankhala/docdb-import-export
     DOCDB_CA_FILE_PATH="path/to/YOUR_SSL_CAFIL_PATH"
     DOCDB_REPLICA_SET="rs0"
     DOCDB_READ_PREFERENCE="secondaryPreferred"
-    DOCDB_RETRY_WRITES="true"
+    DOCDB_RETRY_WRITES="false"
     DOCDB_DBNAME="dbname"
     DOCDB_TLS_ALLOW_INVALID_HOSTNAMES="true"
     DOCDB_DIRECT_CONNECTION="true"
