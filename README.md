@@ -23,7 +23,7 @@ https://github.com/msankhala/docdb-import-export
 
     keep this command running in a separate terminal window.
 
-1. Create `.env` file in the directory from where you will be running the import/export command.
+1. Create `.env` file with the following variables and set the values.
 
     ```env
     DOCDB_HOST="YOUR_DOCUMENT_DB_HOSTNAME"
@@ -39,16 +39,16 @@ https://github.com/msankhala/docdb-import-export
     DOCDB_DIRECT_CONNECTION="true"
     ```
 
-Provide the relevant values to the above environment variables. These variables will automatically be loaded by the package.
-
 ## Uses
 
 1. Import data from a json file to document db
 
     ```sh
     python -m docdb_import_export import \
+    --env-file=/path/to/.env \
     --fromjson=../my-data-folder/my.json \
-    --db=test --collection=temp \
+    --db=test \
+    --collection=temp \
     --drop
     ```
 
@@ -56,8 +56,10 @@ Provide the relevant values to the above environment variables. These variables 
 
     ```sh
     python -m docdb_import_export import \
+    --env-file=/path/to/.env \
     --fromjson=../my-data-folder/my.json \
-    --db=test --collection=temp \
+    --db=test \
+    --collection=temp \
     --import-class=some-dir/MyCustomImporter.py \
     --drop
     ```
@@ -68,6 +70,7 @@ Provide the relevant values to the above environment variables. These variables 
 
     ```sh
     python -m docdb_import_export import \
+    --env-file=/path/to/.env \
     --fromjsondir=../my-data-folder/ \
     --db=test \
     --collection=temp \
@@ -78,8 +81,10 @@ Provide the relevant values to the above environment variables. These variables 
 
     ```sh
     python -m docdb_import_export import \
+    --env-file=/path/to/.env \
     --fromjsondir=../my-data-folder/ \
-    --db=test --collection=temp \
+    --db=test \
+    --collection=temp \
     --import-class=some-dir/MyCustomImporter.py \
     --drop
     ```
@@ -102,8 +107,8 @@ load_dotenv()
 
 class MyCustomImporter(DocDbDefaultJsonImporter):
 
-  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection):
-    super().__init__(source_json_file_path, db_name, collection_name, drop_collection)
+  def __init__(self, source_json_file_path, db_name, collection_name, drop_collection, update):
+    super().__init__(source_json_file_path, db_name, collection_name, drop_collection, update)
 
   def import_json(self):
     # Only add if you want to add support for --drop option.
