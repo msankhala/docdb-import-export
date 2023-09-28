@@ -4,6 +4,10 @@ A simple utility package to import json files to document db and export data fro
 
 https://github.com/msankhala/docdb-import-export
 
+## Sponsor
+
+**Crohn's & Colitis Foundation** - https://www.crohnscolitisfoundation.org
+
 ## Roadmap
 
 1. - [x] Provider importer script to import data from json files to document db.
