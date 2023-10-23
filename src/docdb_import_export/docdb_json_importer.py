@@ -9,7 +9,7 @@ class DocDbJsonImporterAbstract(ABC):
 
   def __init__(self, source_json_file_path, db_name, collection_name, drop_collection = False, update = False):
     # Initialize instance variables.
-    self.docdb = DocDbClient().get_instance("docdb", True)
+    self.docdb = DocDbClient().get_instance("docdb")
     self.source_json_file_path = source_json_file_path
     self.db =  db_name
     self.collection = collection_name
