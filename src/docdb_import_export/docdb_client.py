@@ -37,7 +37,7 @@ class DocDbClient:
     if ssl_true:
       return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?tls=true&tlsCAFile={self.ca_file}&replicaSet={self.replica_set}&readPreference={self.read_preference}&retryWrites={self.retry_writes}&tlsAllowInvalidHostnames={self.tls_allow_invalid_hostnames}&directConnection={self.direct_connection}"
     else:
-      return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?replicaSet={self.replica_set}&readPreference={self.read_preference}&retryWrites={self.retry_writes}&directConnection={self.direct_connection}"
+      return f"mongodb://{username}:{password}@{self.hostname}:{self.port}?retryWrites={self.retry_writes}&directConnection={self.direct_connection}"
 
   # This method gets the document db instance with the given connection name. If
   # the connection is already cached, it will return the cached connection. If
