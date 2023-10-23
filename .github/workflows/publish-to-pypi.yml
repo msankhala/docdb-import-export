@@ -30,5 +30,6 @@ jobs:
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
+        skip-existing: true
         password: ${{ secrets.PYPI_DOCDB_IMPORT_EXPORT_PUBLISHER }}
 
