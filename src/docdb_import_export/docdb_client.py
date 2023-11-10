@@ -19,6 +19,8 @@ class DocDbClient:
     self.ca_file = os.environ.get("DOCDB_TLS_CA_FILE_PATH")
     self.tls_allow_invalid_hostnames = os.environ.get("DOCDB_TLS_ALLOW_INVALID_HOSTNAMES")
     self.direct_connection=os.environ.get("DOCDB_DIRECT_CONNECTION")
+    self.auth_source_db = os.environ.get("DOCDB_AUTH_SOURCE_DB")
+    self.auth_mechanism = os.environ.get("DOCDB_AUTH_MECHANISM")
 
   # This method gets document db connection string, if ssl_true parameter is
   # true, it will return the ssl connection string, otherwise it will return
@@ -38,8 +40,12 @@ class DocDbClient:
     if ssl_true:
       return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?tls=true&tlsCAFile={self.ca_file}&replicaSet={self.replica_set}&readPreference={self.read_preference}&retryWrites={self.retry_writes}&tlsAllowInvalidHostnames={self.tls_allow_invalid_hostnames}&directConnection={self.direct_connection}"
     else:
-      return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?retryWrites={self.retry_writes}&directConnection={self.direct_connection}&authSource={self.dbname}&authMechanism=SCRAM-SHA-1"
-
+      connection_string = f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?retryWrites={self.retry_writes}&directConnection={self.direct_connection}"
+      if self.auth_source_db:
+        connection_string = connection_string + f"&authSource={self.auth_source_db}"
+      if self.auth_mechanism:
+        connection_string = connection_string + f"&authMechanism={self.auth_mechanism}"
+      return connection_string
   # This method gets the document db instance with the given connection name. If
   # the connection is already cached, it will return the cached connection. If
   # the connection is not cached, it will create a new connection and cache it.
