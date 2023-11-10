@@ -11,6 +11,7 @@ class DocDbClient:
     # Initialize instance variables.
     self.hostname = os.environ.get("DOCDB_HOST")
     self.port = os.environ.get("DOCDB_PORT")
+    self.dbname = os.environ.get("DOCDB_DBNAME")
     self.replica_set = os.environ.get("DOCDB_REPLICA_SET")
     self.read_preference = os.environ.get("DOCDB_READ_PREFERENCE")
     self.retry_writes = os.environ.get("DOCDB_RETRY_WRITES")
@@ -33,11 +34,11 @@ class DocDbClient:
   def __get_docdb_connection_string(self):
     username = os.environ.get("DOCDB_USERNAME")
     password = os.environ.get("DOCDB_PASSWORD")
-    ssl_true = os.environ.get("DOCDB_IS_TLS_CONNECTION")
+    ssl_true = os.environ.get("DOCDB_IS_TLS_CONNECTION").lower() == "true"
     if ssl_true:
       return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?tls=true&tlsCAFile={self.ca_file}&replicaSet={self.replica_set}&readPreference={self.read_preference}&retryWrites={self.retry_writes}&tlsAllowInvalidHostnames={self.tls_allow_invalid_hostnames}&directConnection={self.direct_connection}"
     else:
-      return f"mongodb://{username}:{password}@{self.hostname}:{self.port}?retryWrites={self.retry_writes}&directConnection={self.direct_connection}"
+      return f"mongodb://{username}:{password}@{self.hostname}:{self.port}/?retryWrites={self.retry_writes}&directConnection={self.direct_connection}&authSource={self.dbname}&authMechanism=SCRAM-SHA-1"
 
   # This method gets the document db instance with the given connection name. If
   # the connection is already cached, it will return the cached connection. If

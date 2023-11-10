@@ -1,6 +1,6 @@
 [project]
 name = "docdb-import-export"
-version = "0.5.0"
+version = "0.5.1"
 authors = [
   { name="Mahesh Sankhala", email="maheshsainni@gmail.com" },
 ]
